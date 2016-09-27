@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" href="css/style.css">
+    
+    <script src="lib/react.js"></script>
+    <script src="lib/react-with-addons.min.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="lib/browser.min.js"></script>
+    
+    <script type="text/babel">
+    
+    var Liquid = React.createClass({
+    
+    getInitialState:function(){
+        return {
+            currentTemp:222
+        };
+    },
+    setTemperature: function(e){
+        this.setState({currentTemp:e.target.value});
+    },    
+    render: function() {
+        var stateOfMatter;
+        
+        if(this.state.currentTemp <= this.props.config.freezing){
+            stateOfMatter = "solid";
+        }
+        else if(this.state.currentTemp >= this.props.config.boiling)
+        {
+            stateOfMatter = "Gas";    
+        }
+        else
+        {
+            stateOfMatter = "Liquid";
+        }
+        return (
+                <div>
+                   <input type="text" onChange = {this.setTemperature} value={this.state.currentTemp}></input>
+                    <p>At {this.state.currentTemp}&deg;F, {this.props.config.name} is considered to be a "{stateOfMatter}" state of matter.</p>
+                </div>
+            )
+        
+    }
+});
+
+var ethanol = {
+    name:"Ethanol",
+    freezing: -173.2,
+    boiling:173.1
+};
+ 
+var ethanolE1 = document.createElement("div");
+document.getElementById('container').appendChild(ethanolE1);
+ReactDOM.render(<Liquid config={ethanol}/>, ethanolE1);
+
+var water = {
+    name:"Water",
+    freezing:22,
+    boiling:212
+}
+
+var waterE1 = document.createElement("div");
+document.getElementById('container').appendChild(waterE1);
+ReactDOM.render(<Liquid config = {water}></Liquid>, waterE1);
+
+    </script>
+    
+</head>
+<body>
+    <div id="container"></div>
+</body>
+</html>

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <script src="lib/react.js"></script>
+    <script src="lib/react-with-addons.min.js"></script>
+    <script src="lib/react-dom.js"></script>
+    <script src="lib/browser.min.js"></script>
+    
+    <script type="text/babel">
+
+        var Liquid = React.createClass({
+            getInitialState:function(){
+                return{
+                    currentTemp:this.props.config.boiling
+                };   
+            },
+            setTemperature: function(e){
+                this.setState({currentTemp:e.target.value});
+            },
+            render:function(){
+                var stateOfMatter;
+                
+                if(this.state.currentTemp <= this.props.config.freezing){
+                    stateOfMatter = "Solid";
+                }
+                else if(this.state.currentTemp >= this.props.config.boiling){
+                    stateOfMatter = "Gas";
+                }
+                else{
+                    stateOfMatter = "Liquid";
+                }
+                return (
+                    <div>
+                        <input type="text" onChange = {this.setTemperature} value = {this.state.currentTemp}></input>
+                        <p>At {this.state.currentTemp}&deg;F, {this.props.config.name} is considered to be a "{stateOfMatter}" state of Matter</p>
+                    </div>
+                )
+            }
+        });
+
+        var LiquidList = React.createClass({
+            render : function(){
+                var liquids = this.props.liquids.map(function(liquidObject, index){
+                    return <Liquid config = {liquidObject} key={index} />
+                });
+                return(
+                    <div>
+                        {liquids}
+                    </div>
+                );
+            }
+        });
+
+    var water = {
+        name: "Water",
+        freezin: 32,
+        boiling: 212
+    };
+    
+    var ethanol = {
+        name:"Ethanol",
+        freezin: -173.2,
+        boiling:  173.1
+    }
+    
+    ReactDOM.render(<LiquidList liquids={[ethanol, water]}></LiquidList>, document.getElementById("container"));
+    </script>
+    
+    
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+</body>
+</html>
